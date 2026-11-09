@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Appraisal360 — Penilaian Kinerja 360°</title>
+  <meta name="color-scheme" content="light dark">
+
+  <script src="js/boot.js"></script>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+
+  <div id="topProgress" class="top-progress" aria-hidden="true"><span></span></div>
+
+  <!-- ══ Loading overlay ══ -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="wf-spinner" role="status" aria-label="Memuat"></div>
+    <p class="mt-3 annotation" id="loadingMsg">Memuat aplikasi</p>
+    <div id="loadingStuck" class="loading-stuck" style="display:none;">
+      <p class="body-sm">Pemuatan lebih lama dari biasanya. Jika Anda login dengan beberapa akun Google, coba buka di jendela penyamaran atau muat ulang.</p>
+      <a class="btn-primary-wf" href="app.html">Muat ulang</a>
+    </div>
+  </div>
+
+  <!-- ══ LOGIN ══ -->
+  <div id="loginScreen" class="login-screen" style="display:none;">
+    <section class="login-hero" aria-label="Tentang Appraisal360">
+      <span class="hero-pill"><i class="bi bi-diagram-3"></i> Penilaian Kinerja 360°</span>
+      <h2>Penilaian kinerja yang adil, terukur, dan transparan.</h2>
+      <p class="lead">Kumpulkan perspektif atasan, rekan, dan bawahan dalam satu alur. Skor dihitung otomatis dan langsung menjadi laporan yang siap ditindaklanjuti.</p>
+      <div class="hero-features">
+        <div class="hero-feature"><i class="bi bi-people"></i><div>Multi-perspektif</div><span>Atasan, rekan, dan bawahan</span></div>
+        <div class="hero-feature"><i class="bi bi-calculator"></i><div>Scoring otomatis</div><span>Bobot dan interpretasi konsisten</span></div>
+        <div class="hero-feature"><i class="bi bi-shield-check"></i><div>Audit trail</div><span>Setiap perubahan tercatat</span></div>
+      </div>
+      <svg class="login-wave" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="currentColor" d="M0,96 C220,20 460,150 720,92 C980,34 1200,132 1440,70 L1440,170 L0,170 Z"></path>
+      </svg>
+    </section>
+
+    <div class="login-side">
+      <div class="login-card">
+        <div class="login-logo-box">
+          <img id="loginLogo" src="" alt="" style="display:none;">
+          <i id="loginLogoFallback" class="bi bi-diagram-3"></i>
+        </div>
+        <h1 id="loginCompanyName">Appraisal360</h1>
+        <p class="sub">Masuk untuk melanjutkan penilaian</p>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="mb-3">
+            <label class="wf-label" for="loginEmail">Email perusahaan <span class="req">*</span></label>
+            <input type="email" class="wf-input" id="loginEmail" placeholder="nama@perusahaan.com" required autocomplete="username">
+          </div>
+          <div class="mb-3">
+            <label class="wf-label" for="loginPin">PIN akses <span class="req">*</span></label>
+            <input type="password" class="wf-input" id="loginPin" placeholder="••••" maxlength="6" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn-primary-wf w-100" id="loginBtn">
+            <span id="loginBtnText">Masuk ke sistem</span>
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </form>
+        <p class="text-center mt-3 mb-0"><a class="home-link" href="index.html"><i class="bi bi-arrow-left"></i> Kembali ke beranda</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ APP SHELL ══ -->
+  <div id="appShell" style="display:none;">
+
+    <nav id="sidebar" class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-row">
+          <img id="appLogo" src="" alt="" style="display:none;">
+          <i id="appLogoFallback" class="bi bi-diagram-3"></i>
+          <div>
+            <h5 id="appTitle">Appraisal360</h5>
+            <span class="annotation">v1.0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-role-banner">
+        <span class="annotation" id="sidebarRoleTag">Role: —</span>
+        <div id="sidebarUserName" class="label-md">—</div>
+      </div>
+
+      <ul class="sidebar-nav" id="sidebarNavAdmin" style="display:none;">
+        <li><a href="#" onclick="navigateTo('dashboard');return false;" class="nav-link" data-section="dashboard"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
+        <li><a href="#" onclick="navigateTo('karyawan');return false;" class="nav-link" data-section="karyawan"><i class="bi bi-people"></i><span>Master karyawan</span></a></li>
+        <li><a href="#" onclick="navigateTo('periode');return false;" class="nav-link" data-section="periode"><i class="bi bi-calendar-range"></i><span>Periode penilaian</span></a></li>
+        <li><a href="#" onclick="navigateTo('formulir');return false;" class="nav-link" data-section="formulir"><i class="bi bi-ui-checks-grid"></i><span>Formulir penilaian</span></a></li>
+        <li><a href="#" onclick="navigateTo('mapping');return false;" class="nav-link" data-section="mapping"><i class="bi bi-diagram-3"></i><span>Assign penilai</span></a></li>
+        <li><a href="#" onclick="navigateTo('laporan');return false;" class="nav-link" data-section="laporan"><i class="bi bi-bar-chart-line"></i><span>Laporan</span></a></li>
+        <li><a href="#" onclick="navigateTo('audit');return false;" class="nav-link" data-section="audit"><i class="bi bi-shield-check"></i><span>Audit trail</span></a></li>
+        <li><a href="#" onclick="navigateTo('settings');return false;" class="nav-link" data-section="settings"><i class="bi bi-gear"></i><span>Pengaturan</span></a></li>
+      </ul>
+
+      <ul class="sidebar-nav" id="sidebarNavStaff" style="display:none;">
+        <li><a href="#" onclick="navigateTo('portal');return false;" class="nav-link" data-section="portal"><i class="bi bi-clipboard-check"></i><span>Portal penilaian saya</span></a></li>
+        <li><a href="#" onclick="navigateTo('hasilSaya');return false;" class="nav-link" data-section="hasilSaya"><i class="bi bi-graph-up-arrow"></i><span>Hasil & feedback saya</span></a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+          <label class="form-check-label" for="darkModeToggle"><i class="bi bi-moon-stars"></i> Mode gelap</label>
+        </div>
+        <a href="#" onclick="handleLogout();return false;" class="nav-link logout-link"><i class="bi bi-box-arrow-left"></i><span>Keluar</span></a>
+      </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <main id="mainContent" class="main-content">
+      <header class="topbar">
+        <button type="button" class="btn-icon d-lg-none" onclick="toggleSidebar()" aria-label="Buka menu"><i class="bi bi-list"></i></button>
+        <div class="topbar-title">
+          <span class="annotation" id="breadcrumbTag">Appraisal360</span>
+          <h6 id="pageTitle">Dashboard</h6>
+        </div>
+        <div class="topbar-right">
+          <span class="pill pill-active" id="periodeActiveBadge">—</span>
+        </div>
+      </header>
+
+      <section id="section-dashboard" class="content-section"></section>
+      <section id="section-karyawan" class="content-section"></section>
+      <section id="section-periode" class="content-section"></section>
+      <section id="section-formulir" class="content-section"></section>
+      <section id="section-mapping" class="content-section"></section>
+      <section id="section-laporan" class="content-section"></section>
+      <section id="section-audit" class="content-section"></section>
+      <section id="section-settings" class="content-section"></section>
+      <section id="section-portal" class="content-section"></section>
+      <section id="section-hasilSaya" class="content-section"></section>
+      <section id="section-formPenilaian" class="content-section"></section>
+    </main>
+  </div>
+
+  <!-- ══ Modal: konfirmasi ══ -->
+  <div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content wf-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalTitle">Konfirmasi</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body" id="confirmModalBody">Apakah Anda yakin?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline-wf" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-primary-wf" id="confirmModalBtn">Ya, lanjutkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal: form karyawan ══ -->
+  <div class="modal fade" id="karyawanModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content wf-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="karyawanModalTitle">Tambah karyawan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <form id="karyawanForm">
+            <input type="hidden" id="k_ID_Karyawan">
+            <div class="mb-3"><label class="wf-label" for="k_Nama">Nama lengkap <span class="req">*</span></label><input class="wf-input" id="k_Nama" required></div>
+            <div class="mb-3"><label class="wf-label" for="k_Email">Email <span class="req">*</span></label><input type="email" class="wf-input" id="k_Email" required></div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="wf-label" for="k_Departemen">Departemen</label><input class="wf-input" id="k_Departemen"></div>
+              <div class="col-6 mb-3"><label class="wf-label" for="k_Posisi">Posisi</label><input class="wf-input" id="k_Posisi"></div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="wf-label" for="k_Atasan_Langsung_ID">Atasan langsung</label><select class="wf-input" id="k_Atasan_Langsung_ID"><option value="">— Tanpa atasan —</option></select></div>
+              <div class="col-6 mb-3"><label class="wf-label" for="k_Form_Type">Tipe form</label>
+                <select class="wf-input" id="k_Form_Type"><option value="STAFF">STAFF (Staff/Admin Office)</option><option value="MANAGER">MANAGER (SPV/Manager/GM)</option></select>
+              </div>
+            </div>
+            <div class="mb-1"><label class="wf-label" for="k_Status">Status</label>
+              <select class="wf-input" id="k_Status"><option value="Active">Active</option><option value="Nonaktif">Nonaktif</option></select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline-wf" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-primary-wf" onclick="submitKaryawanForm()">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal: import massal ══ -->
+  <div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content wf-modal">
+        <div class="modal-header">
+          <h5 class="modal-title">Import massal karyawan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <p class="body-sm">Tempel data dari Excel atau Sheets, pisahkan kolom dengan TAB. Kolom: Nama, Email, Departemen, Posisi, Atasan (nama atau email atasan yang sudah ada, atau di baris atas), Form_Type (STAFF atau MANAGER). Baris yang tidak valid dilewati dan alasannya ditampilkan.</p>
+          <textarea class="wf-input" id="importTextarea" rows="8" placeholder="Budi Santoso&#9;budi@company.com&#9;IT&#9;Developer&#9;siti@company.com&#9;STAFF"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline-wf" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-primary-wf" onclick="submitBulkImport()">Import data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal: periode ══ -->
+  <div class="modal fade" id="periodeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content wf-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="periodeModalTitle">Periode baru</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <form id="periodeForm">
+            <input type="hidden" id="p_ID_Periode">
+            <div class="mb-3"><label class="wf-label" for="p_Nama_Periode">Nama periode <span class="req">*</span></label><input class="wf-input" id="p_Nama_Periode" required></div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="wf-label" for="p_Tipe">Tipe</label>
+                <select class="wf-input" id="p_Tipe"><option>Tahunan</option><option>Semester</option><option>On-Demand</option></select>
+              </div>
+              <div class="col-6 mb-3"><label class="wf-label" for="p_Status">Status</label>
+                <select class="wf-input" id="p_Status" disabled title="Status diubah lewat tombol Buka / Tutup di kartu periode"><option>Draft</option><option>Open</option><option>Closed</option></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3"><label class="wf-label" for="p_Tgl_Mulai">Tanggal mulai</label><input type="date" class="wf-input" id="p_Tgl_Mulai"></div>
+              <div class="col-6 mb-3"><label class="wf-label" for="p_Tgl_Selesai">Tanggal selesai</label><input type="date" class="wf-input" id="p_Tgl_Selesai"></div>
+            </div>
+            <label class="wf-label">Bobot perspektif (total 100%)</label>
+            <div class="row">
+              <div class="col-3 mb-3"><input type="number" class="wf-input" id="p_Bobot_Self" placeholder="Self %" aria-label="Bobot self"></div>
+              <div class="col-3 mb-3"><input type="number" class="wf-input" id="p_Bobot_Atasan" placeholder="Atasan %" aria-label="Bobot atasan"></div>
+              <div class="col-3 mb-3"><input type="number" class="wf-input" id="p_Bobot_Peer" placeholder="Peer %" aria-label="Bobot peer"></div>
+              <div class="col-3 mb-3"><input type="number" class="wf-input" id="p_Bobot_Bawahan" placeholder="Bawahan %" aria-label="Bobot bawahan"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline-wf" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-primary-wf" onclick="submitPeriodeForm()">Simpan periode</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal: laporan individu ══ -->
+  <div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content wf-modal">
+        <div class="modal-header">
+          <h5 class="modal-title">Laporan individu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body" id="reportModalBody"></div>
+        <div class="modal-footer" id="reportModalFooter"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Toast ══ -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+    <div id="appToast" class="toast wf-toast" role="alert" aria-live="assertive">
+      <div class="toast-header">
+        <strong class="me-auto" id="toastTitle">Notifikasi</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Tutup"></button>
+      </div>
+      <div class="toast-body" id="toastBody"></div>
+    </div>
+  </div>
+
+  <script defer src="js/config.js"></script>
+  <script defer src="js/api.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Appraisal360 — Penilaian kinerja 360° untuk tim Anda</title>
+<meta name="description" content="Kumpulkan nilai dari diri sendiri, atasan, rekan, dan bawahan. Skor akhir, rekomendasi tindak lanjut, dan laporan PDF dihitung otomatis.">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: { colors: {
+  bg: 'var(--bg)', surface: 'var(--surface)', ink: 'var(--ink)', muted: 'var(--muted)', line: 'var(--line)',
+  brand: 'var(--brand)', 'brand-ink': 'var(--brand-ink)', warm: 'var(--warm)', 'warm-ink': 'var(--warm-ink)'
+} } } };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/landing.css">
+
+</head>
+<body class="antialiased">
+<div class="cyber-bg" aria-hidden="true"></div>
+
+<header class="site-header z-40 border-b border-line bg-surface">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="#" class="flex items-center gap-2 text-lg font-extrabold tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
+      <img id="brandLogo" alt="" class="h-8 w-8 rounded object-contain" style="display:none" onerror="this.style.display='none'">
+      <span data-app-name>Appraisal360</span>
+    </a>
+    <nav aria-label="Navigasi utama" class="hidden items-center gap-7 text-sm font-medium md:flex">
+      <a class="text-muted hover:text-ink" href="#fitur">Fitur</a>
+      <a class="text-muted hover:text-ink" href="#cara-kerja">Cara kerja</a>
+      <a class="text-muted hover:text-ink" href="#formulir">Formulir</a>
+      <a class="text-muted hover:text-ink" href="#faq">Tanya jawab</a>
+      <a class="rounded-lg bg-brand px-4 py-2 text-brand-ink hover:opacity-90" href="app.html">Masuk</a>
+    </nav>
+    <button id="menuBtn" type="button" class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-lg text-ink hover:bg-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand md:hidden"
+      aria-expanded="false" aria-controls="menu" aria-label="Buka menu">
+      <svg id="icoOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg id="icoClose" class="hidden h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav id="menu" aria-label="Menu seluler" class="hidden border-t border-line px-4 pb-4 pt-2 md:hidden">
+    <a class="block rounded-lg px-3 py-3 font-medium hover:bg-bg" href="#fitur">Fitur</a>
+    <a class="block rounded-lg px-3 py-3 font-medium hover:bg-bg" href="#cara-kerja">Cara kerja</a>
+    <a class="block rounded-lg px-3 py-3 font-medium hover:bg-bg" href="#formulir">Formulir</a>
+    <a class="block rounded-lg px-3 py-3 font-medium hover:bg-bg" href="#faq">Tanya jawab</a>
+    <a class="mt-2 block rounded-lg bg-brand px-3 py-3 text-center font-semibold text-brand-ink" href="app.html">Masuk</a>
+  </nav>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 lg:gap-16 lg:px-8 lg:py-24">
+    <div>
+      <h1 class="neon-title text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">Penilaian kinerja yang adil, dari empat sudut pandang.</h1>
+      <p class="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg">Nilai dari diri sendiri, atasan, rekan, dan bawahan dikumpulkan dalam satu formulir. Skor akhir dan rekomendasi tindak lanjut dihitung otomatis.</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a id="masuk" href="app.html" class="inline-flex h-12 items-center justify-center rounded-lg bg-brand px-6 font-semibold text-brand-ink hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">Masuk ke aplikasi</a>
+        <a href="#formulir" class="inline-flex h-12 items-center justify-center rounded-lg border border-line bg-surface px-6 font-semibold hover:bg-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">Lihat formulir</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="globe-stage" id="globeStage">
+        <canvas id="globe" role="img" aria-label="Globe holografis interaktif: empat perspektif penilaian terhubung ke satu skor akhir"></canvas>
+        <div class="hud hud-a"><i></i>Pemindaian 360°</div>
+        <div class="hud hud-b">Contoh skor akhir<br><b>4,35 / 5</b></div>
+        <p class="globe-hint">Seret untuk memutar</p>
+      </div>
+      <!-- Contoh satu parameter formulir -->
+      <div class="demo-card rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6" role="img" aria-label="Contoh penilaian: Sikap dan etos kerja, nilai 3, Capai standar, bobot 15 persen, skor 0,450">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="text-lg font-bold leading-snug">Sikap dan etos kerja</p>
+          <p class="mt-1 text-sm italic text-muted">Etika dan semangat kerja dalam menyelesaikan tugas</p>
+        </div>
+        <span class="shrink-0 rounded-md bg-bg px-2 py-1 text-xs font-medium text-muted">Bobot 15%</span>
+      </div>
+      <div class="mt-5 grid grid-cols-5 gap-2 text-center" aria-hidden="true">
+        <div class="rounded-lg border border-line py-3 text-xl font-bold text-muted">1</div>
+        <div class="rounded-lg border border-line py-3 text-xl font-bold text-muted">2</div>
+        <div class="rounded-lg border border-brand bg-brand py-3 text-xl font-bold text-brand-ink">3</div>
+        <div class="rounded-lg border border-line py-3 text-xl font-bold text-muted">4</div>
+        <div class="rounded-lg border border-line py-3 text-xl font-bold text-muted">5</div>
+      </div>
+      <div class="mt-4 rounded-lg bg-warm p-3 text-sm leading-relaxed text-warm-ink">
+        <p class="font-semibold">Capai standar</p>
+        <p>Menjalankan instruksi sesuai arahan dan menerima tanggung jawab perannya sendiri.</p>
+      </div>
+      <p class="mt-4 text-sm text-muted">Nilai 3 × bobot 15% = skor <b class="text-ink">0,450</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fitur -->
+  <section id="fitur" class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <h2 class="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Semua yang dibutuhkan HR untuk satu siklus penilaian</h2>
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-xl border border-line bg-bg p-5 sm:col-span-2 sm:p-6">
+          <h3 class="text-lg font-bold">Penilaian 360° dengan bobot per perspektif</h3>
+          <p class="mt-2 max-w-xl text-muted">Atur kontribusi tiap penilai di setiap periode. Contoh bawaan: diri sendiri 10%, atasan 40%, rekan 30%, bawahan 20%.</p>
+          <div class="mt-5 flex h-3 overflow-hidden rounded-full" role="img" aria-label="Komposisi bobot: diri sendiri 10 persen, atasan 40, rekan 30, bawahan 20">
+            <span class="bg-warm-ink" style="width:10%"></span><span class="bg-brand" style="width:40%"></span><span class="bg-ink" style="width:30%; opacity:.55"></span><span class="bg-muted" style="width:20%; opacity:.6"></span>
+          </div>
+          <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted"><li>Diri sendiri 10%</li><li>Atasan 40%</li><li>Rekan 30%</li><li>Bawahan 20%</li></ul>
+        </article>
+        <article class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">Rubrik 1–5 yang jelas</h3>
+          <p class="mt-2 text-muted">Setiap level punya contoh perilaku, sehingga penilai tidak menebak arti angkanya.</p>
+        </article>
+        <article class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">Skor dan tindak lanjut otomatis</h3>
+          <p class="mt-2 text-muted">Bobot × nilai dihitung sistem, lengkap dengan kategori hasil dan rencana pengembangan.</p>
+        </article>
+        <article class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">Masukan yang anonim</h3>
+          <p class="mt-2 text-muted">Kelebihan dan hal yang perlu diperbaiki ditampilkan tanpa nama penilai.</p>
+        </article>
+        <article class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">Laporan PDF dan CSV</h3>
+          <p class="mt-2 text-muted">Unduh laporan per karyawan atau rekap seluruh periode kapan saja.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cara kerja -->
+  <section id="cara-kerja" class="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+    <h2 class="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Tiga langkah dari periode sampai laporan</h2>
+    <ol class="mt-10 grid gap-8 md:grid-cols-3">
+      <li class="flex gap-4 md:block">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-brand-ink">1</span>
+        <div class="md:mt-4"><h3 class="font-bold">Admin menyiapkan periode</h3><p class="mt-1 text-muted">Buat periode, lalu tugaskan penilai untuk setiap karyawan. Penugasan diri sendiri dan atasan bisa dibuat otomatis.</p></div>
+      </li>
+      <li class="flex gap-4 md:block">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-brand-ink">2</span>
+        <div class="md:mt-4"><h3 class="font-bold">Penilai mengisi formulir</h3><p class="mt-1 text-muted">Pilih level 1–5 untuk tiap parameter. Draft tersimpan otomatis dan bisa dilanjutkan nanti.</p></div>
+      </li>
+      <li class="flex gap-4 md:block">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-bold text-brand-ink">3</span>
+        <div class="md:mt-4"><h3 class="font-bold">Sistem menghitung hasil</h3><p class="mt-1 text-muted">Skor akhir, perbandingan antar perspektif, dan laporan siap diunduh begitu periode ditutup.</p></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Formulir -->
+  <section id="formulir" class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <h2 class="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Dua formulir, sesuai level jabatan</h2>
+      <p class="mt-3 max-w-2xl text-muted">Berdasarkan Form Performance Appraisal 2025. Total bobot setiap formulir 100%.</p>
+      <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">Staff / Admin Office <span class="font-normal text-muted">· 7 parameter</span></h3>
+          <ul class="mt-4 space-y-3 text-sm" id="listStaff"></ul>
+        </div>
+        <div class="rounded-xl border border-line bg-bg p-5 sm:p-6">
+          <h3 class="text-lg font-bold">SPV / Manager / GM <span class="font-normal text-muted">· 9 parameter</span></h3>
+          <ul class="mt-4 space-y-3 text-sm" id="listMgr"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Tanya jawab</h2>
+    <div class="mt-8 divide-y divide-line border-y border-line">
+      <details class="group py-4">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">Apakah nama penilai terlihat oleh karyawan?
+          <svg class="chev h-5 w-5 shrink-0 text-muted transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 9l6 6 6-6"/></svg></summary>
+        <p class="mt-2 text-muted">Tidak. Masukan tertulis ditampilkan tanpa nama penilai dan urutannya diacak.</p>
+      </details>
+      <details class="group py-4">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">Di mana data penilaian disimpan?
+          <svg class="chev h-5 w-5 shrink-0 text-muted transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 9l6 6 6-6"/></svg></summary>
+        <p class="mt-2 text-muted">Di Google Sheets milik organisasi Anda. Tidak ada server tambahan yang perlu dikelola.</p>
+      </details>
+      <details class="group py-4">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">Bisakah formulir sudah dikirim diubah lagi?
+          <svg class="chev h-5 w-5 shrink-0 text-muted transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 9l6 6 6-6"/></svg></summary>
+        <p class="mt-2 text-muted">Tidak. Setelah dikirim, formulir dikunci agar hasil penilaian konsisten.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8">
+    <div class="mx-auto flex max-w-6xl flex-col items-start gap-5 rounded-2xl bg-brand p-6 text-brand-ink sm:p-10 md:flex-row md:items-center md:justify-between">
+      <div><h2 class="text-2xl font-bold sm:text-3xl">Siap memulai periode penilaian berikutnya?</h2><p class="mt-1 opacity-90">Masuk dan buat periode pertama Anda.</p></div>
+      <a href="app.html" class="inline-flex h-12 shrink-0 items-center justify-center rounded-lg bg-surface px-6 font-semibold text-ink hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface">Masuk ke aplikasi</a>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-line bg-surface">
+  <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-muted sm:flex-row sm:justify-between sm:px-6 lg:px-8">
+    <p>© 2026 <span data-company-name>Appraisal360</span></p>
+    <p><span data-app-name>Appraisal360</span> · penilaian kinerja 360°</p>
+  </div>
+</footer>
+
+<script defer src="js/config.js"></script>
+<script defer src="js/api.js"></script>
+<script defer src="js/landing.js"></script>
+
+</body>
+</html>
